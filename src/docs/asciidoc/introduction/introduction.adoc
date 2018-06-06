@@ -5,7 +5,39 @@ include::{docdir}/variables.adoc[]
 
 == ZetaPush Celtia
 
-TODO: Write presentation
+=== What is ZetaPush
+
+ZetaPush is a BaaS (Backend As A Service) extensible with FaaS (Function As A Service)
+
+ZetaPush is a platform that offers off-the-shelf services that can be directly integrated into your applications. For example, we offer data storage services, file storage services,...
+In addition to these services, you can develop your business code directly on ZetaPush using a proprietary language called ZMS (ZetaPush Macro Script).
+
+Developers can connect their applications by calling APIs deployed on ZetaPush either in REST mode or in Real Time mode. To help them they can use existing development kits in different languages: JavaScript, Java, Swift, Python, C.
+
+
+image:schemas/ZetaPushV2.png[ZetaPush v2 schema]
+
+=== What is ZetaPush Celtia
+
+ZetaPush v3 aka Celtia is the new version of ZetaPush. The main new feature is the addition of JavaScript support as a way to extend the functionality of ZetaPush services.
+You will be able to write your business code directly in JavaScript or TypeScript and we will soon take into account other languages such as Python, Golang,...
+
+ZetaPush let you easily host the front code of your web application.
+
+And finally we provide you a command line to create, modify and deploy your applications in an instant.
+
+image:schemas/ZetaPushCeltia.png[ZetaPush Celtia schema]
+
+=== What are the main benefits of using ZetaPush?
+
+* Reuse of software bricks
+* Less code to write
+* Development time acceleration
+* No deployment costs
+* No scalability problems
+* No platform maintenance
+* Monitoring and Alerting
+* Predictable costs
 
 == Sections
 
