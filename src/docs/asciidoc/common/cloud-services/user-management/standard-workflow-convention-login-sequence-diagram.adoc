@@ -1,0 +1,56 @@
+:relative-path: ../../../
+include::{docdir}/variables.adoc[]
+
+
+[plantuml, standard-workflow-convention-login-sequence-diagram, png]
+.Login
+....
+autonumber
+
+
+box "front" #LightBlue
+actor User
+participant "Front"
+participant "StandardUserWorkflow[front]" 
+end box
+
+note left of Front
+  form fields:
+  - username or email
+  - password
+end note
+User -[#0000FF]> Front: login(form)
+
+Front -[#0000FF]> Front: credentials
+note right of Front
+  credentials = {
+    username,
+    password
+  }
+end note
+
+
+Front -[#0000FF]> "StandardUserWorkflow[front]": login(credentials)
+"StandardUserWorkflow[front]" -[#999999]-> "StandardUserWorkflow[cloud]": remote call
+activate "StandardUserWorkflow[cloud]"
+
+"StandardUserWorkflow[cloud]" -> UsernamePasswordLoginManager: login(credentials)
+activate UsernamePasswordLoginManager
+database UserCloudServiceStorage
+UsernamePasswordLoginManager -> UserCloudServiceStorage: login(credentials)
+UsernamePasswordLoginManager <-- UserCloudServiceStorage: userKey
+UsernamePasswordLoginManager -> UserCloudServiceStorage: getUserInfo(userKey)
+UsernamePasswordLoginManager <-- UserCloudServiceStorage: account: Account
+"StandardUserWorkflow[cloud]" <-- UsernamePasswordLoginManager: account
+deactivate UsernamePasswordLoginManager
+
+"StandardUserWorkflow[front]" <-[#999999]-- "StandardUserWorkflow[cloud]": account
+deactivate "StandardUserWorkflow[cloud]"
+Front <-[#0000FF]-- "StandardUserWorkflow[front]": account
+
+
+note left of Front
+  User is logged and can
+  user your application
+end note
+....

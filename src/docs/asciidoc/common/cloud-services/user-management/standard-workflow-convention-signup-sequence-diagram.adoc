@@ -2,7 +2,7 @@
 include::{docdir}/variables.adoc[]
 
 
-[plantuml, diagram-sequences, png]
+[plantuml, standard-workflow-convention-signup-sequence-diagram, png]
 .Signup
 ....
 autonumber
@@ -44,12 +44,12 @@ Front -[#0000FF]> "StandardUserWorkflow[front]": signup(accountDetails, confirma
 "StandardUserWorkflow[front]" -[#999999]-> "StandardUserWorkflow[cloud]": remote call
 activate "StandardUserWorkflow[cloud]"
 
-"StandardUserWorkflow[cloud]" -> UsernamePasswordAccountCreationDetails: signup(accountDetails)
-activate UsernamePasswordAccountCreationDetails
+"StandardUserWorkflow[cloud]" -> UsernamePasswordAccountCreationManager: signup(accountDetails)
+activate UsernamePasswordAccountCreationManager
 database UserCloudServiceStorage
-UsernamePasswordAccountCreationDetails -> UserCloudServiceStorage: store()
-"StandardUserWorkflow[cloud]" <-- UsernamePasswordAccountCreationDetails: account: Account
-deactivate UsernamePasswordAccountCreationDetails
+UsernamePasswordAccountCreationManager -> UserCloudServiceStorage: store()
+"StandardUserWorkflow[cloud]" <-- UsernamePasswordAccountCreationManager: account: Account
+deactivate UsernamePasswordAccountCreationManager
 
 "StandardUserWorkflow[cloud]" -> TemplatedMessageAccountConfirmationManager: askConfirmation(account)
 activate TemplatedMessageAccountConfirmationManager
@@ -86,8 +86,9 @@ TemplatedMessageAccountConfirmationManager -> TemplatedMessageAccountConfirmatio
 "StandardUserWorkflow[cloud]" <-- TemplatedMessageAccountConfirmationManager: pendingAccount
 deactivate EmailCloudServiceSender
 deactivate TemplatedMessageAccountConfirmationManager
-Front <-[#999999]-- "StandardUserWorkflow[cloud]": pendingAccount
+"StandardUserWorkflow[front]" <-[#999999]-- "StandardUserWorkflow[cloud]": pendingAccount
 deactivate "StandardUserWorkflow[cloud]"
+Front <-[#0000FF]-- "StandardUserWorkflow[front]": pendingAccount
 
 ...User clicks on the link provided in the email...
 
@@ -107,8 +108,9 @@ TemplatedMessageAccountConfirmationManager <-- UserCloudServiceStorage: confirme
 
 "StandardUserWorkflow[cloud]" -> TemplatedMessageAccountConfirmationManager: confirmedAccount
 deactivate TemplatedMessageAccountConfirmationManager
-Front <-[#999999]-- "StandardUserWorkflow[cloud]": confirmedAccount
+"StandardUserWorkflow[front]" <-[#999999]-- "StandardUserWorkflow[cloud]": confirmedAccount
 deactivate "StandardUserWorkflow[cloud]"
+Front <-[#0000FF]-- "StandardUserWorkflow[front]": confirmedAccount
 
 note left of Front
   User is now registered and 
