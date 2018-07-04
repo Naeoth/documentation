@@ -1,2 +1,27 @@
 :relative-path: ../../
 include::{docdir}/variables.adoc[]
+
+== Definitions
+
+== Use cases
+
+=== A user wants to signup to your application using login/password
+
+// TODO: how to ?
+// TODO: profile information
+// TODO: login/password
+// TODO: confirmation by email + templating
+// TODO: avatar
+// TODO: validation
+
+=== A user wants to login to your application using login/password
+
+=== A user wants to login to your application using Google, Facebook or Github
+
+=== A user wants to reset its password
+
+
+
+== API
+
+

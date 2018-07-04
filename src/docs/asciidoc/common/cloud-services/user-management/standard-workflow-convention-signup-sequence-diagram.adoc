@@ -1,0 +1,69 @@
+:relative-path: ../../../
+include::{docdir}/variables.adoc[]
+
+
+[plantuml, diagram-sequences, png]
+.Signup
+....
+autonumber
+
+actor User
+
+note left of Front
+  form fields:
+  - username
+  - email
+  - password
+  - confirmPassword
+end note
+User -> Front: signup(form)
+
+Front -> Front: accountDetails
+note right of Front
+  accountDetails = new UsernamePasswordAccountCreationDetails({
+    username,
+    email,
+    password,
+    confirmPassword
+  })
+end note
+
+Front -> Front: confirmationRedirection
+note right of Front
+  confirmationRedirection = new ConfirmationRedirection(
+    "${zp.front.url}/#account-confirmation/${confirmation.token}"
+  )
+end note
+
+Front -> "StandardUserWorkflow[front]": signup(accountDetails, confirmationRedirection)
+"StandardUserWorkflow[front]" -\ "StandardUserWorkflow[cloud]": remote call
+activate "StandardUserWorkflow[cloud]"
+
+"StandardUserWorkflow[cloud]" -> UsernamePasswordAccountCreationDetails: signup(accountDetails)
+activate UsernamePasswordAccountCreationDetails
+database users
+UsernamePasswordAccountCreationDetails -> users: store()
+"StandardUserWorkflow[cloud]" <-- UsernamePasswordAccountCreationDetails: account: Account
+
+"StandardUserWorkflow[cloud]" -> TemplatedMessageAccountConfirmationManager: askConfirmation(account)
+TemplatedMessageAccountConfirmationManager -> StringTemplateResolver: resolve(new DefaultTemplateLocation('confirm'))
+TemplatedMessageAccountConfirmationManager <-- StringTemplateResolver: template: StringTemplate
+
+TemplatedMessageAccountConfirmationManager -> ExtractSubjectTemplateParserDecorator: parse(template, new Variables({zp, account}))
+note right of TemplatedMessageAccountConfirmationManager
+  `zp = zetaPushContextProvider.current()`
+  It means that zp contains information about current application, environment, deployment URL...
+end note
+ExtractSubjectTemplateParserDecorator -> StringTemplateParser: parse(template, variables)
+ExtractSubjectTemplateParserDecorator <-- StringTemplateParser: evaluatedTemplate: ParsedStringTemplate
+ExtractSubjectTemplateParserDecorator -> ExtractSubjectTemplateParserDecorator: extractSubject()
+TemplatedMessageAccountConfirmationManager <-- ExtractSubjectTemplateParserDecorator: emailTemplate: SubjectAndBodyTemplate
+TemplatedMessageAccountConfirmationManager -> EmailCloudServiceSender: send({to: account.email, body: emailTemplate.body, subject: emailTemplate.subject})
+"StandardUserWorkflow[cloud]" <-- TemplatedMessageAccountConfirmationManager: pendingAccount: PendingAccountConfirmation
+Front <-- "StandardUserWorkflow[cloud]": pendingAccount: PendingAccountConfirmation
+
+...User clicks on the link provided in the email...
+
+Front -> Front: extract token from window.location
+Front -> "StandardUserWorkflow[front]": confirm()
+....
