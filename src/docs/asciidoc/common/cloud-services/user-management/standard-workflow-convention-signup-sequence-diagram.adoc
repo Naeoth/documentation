@@ -7,7 +7,12 @@ include::{docdir}/variables.adoc[]
 ....
 autonumber
 
+
+box "front" #LightBlue
 actor User
+participant "Front"
+participant "StandardUserWorkflow[front]" 
+end box
 
 note left of Front
   form fields:
@@ -16,54 +21,97 @@ note left of Front
   - password
   - confirmPassword
 end note
-User -> Front: signup(form)
+User -[#0000FF]> Front: signup(form)
 
-Front -> Front: accountDetails
+Front -[#0000FF]> Front: accountDetails
 note right of Front
-  accountDetails = new UsernamePasswordAccountCreationDetails({
+  accountDetails = {
     username,
     email,
     password,
     confirmPassword
-  })
+  }
 end note
 
-Front -> Front: confirmationRedirection
+Front -[#0000FF]> Front: confirmationRedirection
 note right of Front
-  confirmationRedirection = new ConfirmationRedirection(
-    "${zp.front.url}/#account-confirmation/${confirmation.token}"
-  )
+  confirmationRedirection = {
+    url: "${zp.front.url}/#account-confirmation/${confirmation.token}"
+  }
 end note
 
-Front -> "StandardUserWorkflow[front]": signup(accountDetails, confirmationRedirection)
-"StandardUserWorkflow[front]" -\ "StandardUserWorkflow[cloud]": remote call
+Front -[#0000FF]> "StandardUserWorkflow[front]": signup(accountDetails, confirmationRedirection)
+"StandardUserWorkflow[front]" -[#999999]-> "StandardUserWorkflow[cloud]": remote call
 activate "StandardUserWorkflow[cloud]"
 
 "StandardUserWorkflow[cloud]" -> UsernamePasswordAccountCreationDetails: signup(accountDetails)
 activate UsernamePasswordAccountCreationDetails
-database users
-UsernamePasswordAccountCreationDetails -> users: store()
+database UserCloudServiceStorage
+UsernamePasswordAccountCreationDetails -> UserCloudServiceStorage: store()
 "StandardUserWorkflow[cloud]" <-- UsernamePasswordAccountCreationDetails: account: Account
+deactivate UsernamePasswordAccountCreationDetails
 
 "StandardUserWorkflow[cloud]" -> TemplatedMessageAccountConfirmationManager: askConfirmation(account)
-TemplatedMessageAccountConfirmationManager -> StringTemplateResolver: resolve(new DefaultTemplateLocation('confirm'))
-TemplatedMessageAccountConfirmationManager <-- StringTemplateResolver: template: StringTemplate
+activate TemplatedMessageAccountConfirmationManager
 
-TemplatedMessageAccountConfirmationManager -> ExtractSubjectTemplateParserDecorator: parse(template, new Variables({zp, account}))
+TemplatedMessageAccountConfirmationManager -> StringTemplateResolver: resolve(new DefaultTemplateLocation('confirm'))
+activate StringTemplateResolver
+TemplatedMessageAccountConfirmationManager <-- StringTemplateResolver: template: StringTemplate
+deactivate StringTemplateResolver
+
+TemplatedMessageAccountConfirmationManager -> ExpirableTokenGenerator: generate()
+activate ExpirableTokenGenerator
+TemplatedMessageAccountConfirmationManager <-- ExpirableTokenGenerator: {token, expires}
+deactivate ExpirableTokenGenerator
+
+TemplatedMessageAccountConfirmationManager -> UserCloudServiceStorage: saveConfirmation(account, token, expires)
+TemplatedMessageAccountConfirmationManager -> ExtractSubjectTemplateParserDecorator: parse(template, new Variables({zp, account, confirmation: {token, expires}}))
+activate ExtractSubjectTemplateParserDecorator
 note right of TemplatedMessageAccountConfirmationManager
   `zp = zetaPushContextProvider.current()`
   It means that zp contains information about current application, environment, deployment URL...
 end note
 ExtractSubjectTemplateParserDecorator -> StringTemplateParser: parse(template, variables)
+activate StringTemplateParser
 ExtractSubjectTemplateParserDecorator <-- StringTemplateParser: evaluatedTemplate: ParsedStringTemplate
+deactivate StringTemplateParser
 ExtractSubjectTemplateParserDecorator -> ExtractSubjectTemplateParserDecorator: extractSubject()
 TemplatedMessageAccountConfirmationManager <-- ExtractSubjectTemplateParserDecorator: emailTemplate: SubjectAndBodyTemplate
+deactivate ExtractSubjectTemplateParserDecorator
+
 TemplatedMessageAccountConfirmationManager -> EmailCloudServiceSender: send({to: account.email, body: emailTemplate.body, subject: emailTemplate.subject})
-"StandardUserWorkflow[cloud]" <-- TemplatedMessageAccountConfirmationManager: pendingAccount: PendingAccountConfirmation
-Front <-- "StandardUserWorkflow[cloud]": pendingAccount: PendingAccountConfirmation
+activate EmailCloudServiceSender
+
+TemplatedMessageAccountConfirmationManager -> TemplatedMessageAccountConfirmationManager: pendingAccount = new PendingAccountConfirmation(account)
+"StandardUserWorkflow[cloud]" <-- TemplatedMessageAccountConfirmationManager: pendingAccount
+deactivate EmailCloudServiceSender
+deactivate TemplatedMessageAccountConfirmationManager
+Front <-[#999999]-- "StandardUserWorkflow[cloud]": pendingAccount
+deactivate "StandardUserWorkflow[cloud]"
 
 ...User clicks on the link provided in the email...
 
-Front -> Front: extract token from window.location
-Front -> "StandardUserWorkflow[front]": confirm()
+Front -[#0000FF]> Front: extract token from window.location
+Front -[#0000FF]> "StandardUserWorkflow[front]": confirm({token})
+"StandardUserWorkflow[front]" -[#999999]-> "StandardUserWorkflow[cloud]": remote call
+activate "StandardUserWorkflow[cloud]"
+
+"StandardUserWorkflow[cloud]" -> TemplatedMessageAccountConfirmationManager: confirm({token})
+activate TemplatedMessageAccountConfirmationManager
+
+TemplatedMessageAccountConfirmationManager -> UserCloudServiceStorage: getConfirmationByToken({token})
+TemplatedMessageAccountConfirmationManager <-- UserCloudServiceStorage: {account, token, expires}
+TemplatedMessageAccountConfirmationManager -> TemplatedMessageAccountConfirmationManager: validate(token, expires)
+TemplatedMessageAccountConfirmationManager -> UserCloudServiceStorage: confirmAccount(account)
+TemplatedMessageAccountConfirmationManager <-- UserCloudServiceStorage: confirmedAccount
+
+"StandardUserWorkflow[cloud]" -> TemplatedMessageAccountConfirmationManager: confirmedAccount
+deactivate TemplatedMessageAccountConfirmationManager
+Front <-[#999999]-- "StandardUserWorkflow[cloud]": confirmedAccount
+deactivate "StandardUserWorkflow[cloud]"
+
+note left of Front
+  User is now registered and 
+  can login into your application
+end note
 ....
