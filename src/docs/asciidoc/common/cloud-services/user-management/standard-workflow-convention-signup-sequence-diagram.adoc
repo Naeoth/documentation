@@ -76,6 +76,8 @@ activate StringTemplateParser
 ExtractSubjectTemplateParserDecorator <-- StringTemplateParser: evaluatedTemplate: ParsedStringTemplate
 deactivate StringTemplateParser
 ExtractSubjectTemplateParserDecorator -> ExtractSubjectTemplateParserDecorator: extractSubject()
+activate ExtractSubjectTemplateParserDecorator
+deactivate ExtractSubjectTemplateParserDecorator
 TemplatedMessageAccountConfirmationManager <-- ExtractSubjectTemplateParserDecorator: emailTemplate: SubjectAndBodyTemplate
 deactivate ExtractSubjectTemplateParserDecorator
 
@@ -103,6 +105,8 @@ activate TemplatedMessageAccountConfirmationManager
 TemplatedMessageAccountConfirmationManager -> UserCloudServiceStorage: getConfirmationByToken({token})
 TemplatedMessageAccountConfirmationManager <-- UserCloudServiceStorage: {account, token, expires}
 TemplatedMessageAccountConfirmationManager -> TemplatedMessageAccountConfirmationManager: validate(token, expires)
+activate TemplatedMessageAccountConfirmationManager
+deactivate TemplatedMessageAccountConfirmationManager
 TemplatedMessageAccountConfirmationManager -> UserCloudServiceStorage: confirmAccount(account)
 TemplatedMessageAccountConfirmationManager <-- UserCloudServiceStorage: confirmedAccount
 
