@@ -54,23 +54,31 @@ deactivate UsernamePasswordAccountCreationManager
 "StandardUserWorkflow[cloud]" -> TemplatedMessageAccountConfirmationManager: askConfirmation(account)
 activate TemplatedMessageAccountConfirmationManager
 
-TemplatedMessageAccountConfirmationManager -> StringTemplateResolver: resolve(new DefaultTemplateLocation('confirm'))
-activate StringTemplateResolver
-TemplatedMessageAccountConfirmationManager <-- StringTemplateResolver: template: StringTemplate
-deactivate StringTemplateResolver
 
 TemplatedMessageAccountConfirmationManager -> ExpirableTokenGenerator: generate()
 activate ExpirableTokenGenerator
 TemplatedMessageAccountConfirmationManager <-- ExpirableTokenGenerator: {token, expires}
 deactivate ExpirableTokenGenerator
 
-TemplatedMessageAccountConfirmationManager -> UserCloudServiceStorage: saveConfirmation(account, token, expires)
-TemplatedMessageAccountConfirmationManager -> ExtractSubjectTemplateParserDecorator: parse(template, new Variables({zp, account, confirmation: {token, expires}}))
-activate ExtractSubjectTemplateParserDecorator
+TemplatedMessageAccountConfirmationManager -> UserCloudServiceStorage: savePendingConfirmation(account, token, expires)
+
+TemplatedMessageAccountConfirmationManager -> StringTemplateManager: location = new DefaultResourceLocation('templates/email/confirm.html')\nvariables = new Variables({zp, account, confirmation: {token, expires}})\nloadAndParse(location, variables)
+activate StringTemplateManager
 note right of TemplatedMessageAccountConfirmationManager
   `zp = zetaPushContextProvider.current()`
-  It means that zp contains information about current application, environment, deployment URL...
+  It means that zp contains information about 
+  current application, environment, deployment URL...
 end note
+
+StringTemplateManager -> StringResourceResolver: resolve(location)
+activate StringResourceResolver
+StringTemplateManager <-- StringResourceResolver: template: StringResource
+deactivate StringResourceResolver
+
+StringTemplateManager -> ExtractSubjectTemplateParserDecorator: parse(template, variables)
+activate ExtractSubjectTemplateParserDecorator
+
+
 ExtractSubjectTemplateParserDecorator -> StringTemplateParser: parse(template, variables)
 activate StringTemplateParser
 ExtractSubjectTemplateParserDecorator <-- StringTemplateParser: evaluatedTemplate: ParsedStringTemplate
@@ -78,8 +86,9 @@ deactivate StringTemplateParser
 ExtractSubjectTemplateParserDecorator -> ExtractSubjectTemplateParserDecorator: extractSubject()
 activate ExtractSubjectTemplateParserDecorator
 deactivate ExtractSubjectTemplateParserDecorator
-TemplatedMessageAccountConfirmationManager <-- ExtractSubjectTemplateParserDecorator: emailTemplate: SubjectAndBodyTemplate
-deactivate ExtractSubjectTemplateParserDecorator
+StringTemplateManager <-- ExtractSubjectTemplateParserDecorator: emailTemplate: SubjectAndBodyTemplate
+TemplatedMessageAccountConfirmationManager <-- StringTemplateManager: emailTemplate
+deactivate StringTemplateManager
 
 TemplatedMessageAccountConfirmationManager -> EmailCloudServiceSender: send({to: account.email, body: emailTemplate.body, subject: emailTemplate.subject})
 activate EmailCloudServiceSender
@@ -110,7 +119,7 @@ deactivate TemplatedMessageAccountConfirmationManager
 TemplatedMessageAccountConfirmationManager -> UserCloudServiceStorage: confirmAccount(account)
 TemplatedMessageAccountConfirmationManager <-- UserCloudServiceStorage: confirmedAccount
 
-"StandardUserWorkflow[cloud]" -> TemplatedMessageAccountConfirmationManager: confirmedAccount
+"StandardUserWorkflow[cloud]" <-- TemplatedMessageAccountConfirmationManager: confirmedAccount
 deactivate TemplatedMessageAccountConfirmationManager
 "StandardUserWorkflow[front]" <-[#999999]-- "StandardUserWorkflow[cloud]": confirmedAccount
 deactivate "StandardUserWorkflow[cloud]"
