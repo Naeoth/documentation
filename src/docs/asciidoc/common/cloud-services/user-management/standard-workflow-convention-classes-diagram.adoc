@@ -1,0 +1,10 @@
+:relative-path: ../../../
+include::{docdir}/variables.adoc[]
+
+
+include::{docdir}/common/cloud-services/user-management/classes-diagram/global-classes-diagram.adoc[]
+include::{docdir}/common/cloud-services/user-management/classes-diagram/messaging-classes-diagram.adoc[]
+include::{docdir}/common/cloud-services/user-management/classes-diagram/templating-classes-diagram.adoc[]
+include::{docdir}/common/cloud-services/user-management/classes-diagram/account-classes-diagram.adoc[]
+include::{docdir}/common/cloud-services/user-management/classes-diagram/redirection-link-pages-classes-diagram.adoc[]
+include::{docdir}/common/cloud-services/user-management/classes-diagram/token-classes-diagram.adoc[]

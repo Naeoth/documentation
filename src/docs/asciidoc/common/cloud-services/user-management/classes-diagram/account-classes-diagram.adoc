@@ -1,0 +1,86 @@
+:relative-path: ../../../
+include::{docdir}/variables.adoc[]
+
+
+[plantuml, account-classes-diagram, png]
+....
+package "Account" {
+
+    package "Creation" {
+        abstract class AccountCreationDetails
+
+        class UsernamePasswordAccountCreationDetails {
+            username: string
+            email: string
+            password: string
+            passwordConfirmation: string
+        }
+
+        AccountCreationDetails --> UsernamePasswordAccountCreationDetails
+    }
+
+    package "Confirmation" {
+        abstract class ConfirmedAccount {
+            createdAccountId: string
+        }
+
+        abstract class PendingAccountConfirmation {
+            createdAccountId: string
+            token: string
+            expires: number
+        }
+
+        ConfirmedAccount --> PendingAccountConfirmation
+    }
+
+    package "Login" {
+        abstract class Credentials
+
+        class UsernamePasswordCredentials {
+            String username
+            String password
+        }
+
+        Credentials --> UsernamePasswordCredentials
+    }
+
+    enum AccountStatus {
+        active
+        waitingConfirmation
+        disabled
+    }
+
+    abstract class Account {
+        accountStatus: AccountStatus
+        accountDetails: AccountDetails
+        userProfile: UserProfile
+
+    }
+
+    abstract class AccountDetails {
+        accountId: string
+    }
+
+    class UsernamePasswordAccountDetails {
+        username: string
+        email: string
+    }
+
+    AccountDetails --> UsernamePasswordAccountDetails
+
+    package "User profile" {
+        abstract class UserProfile {
+            accountId: string
+            username: string
+            email: string
+            avatar: Avatar
+        }
+
+        abstract class Avatar
+
+        class DefaultAvatar
+
+        Avatar <|.. DefaultAvatar
+    }
+}
+....

@@ -23,9 +23,9 @@ note left of Front
 end note
 User -[#0000FF]> Front: signup(form)
 
-Front -[#0000FF]> Front: accountDetails
+Front -[#0000FF]> Front: accountCreationDetails
 note right of Front
-  accountDetails = {
+  accountCreationDetails = {
     username,
     email,
     password,
