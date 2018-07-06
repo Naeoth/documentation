@@ -71,16 +71,7 @@ package "Account" {
     package "User profile" {
         abstract class UserProfile {
             accountId: string
-            username: string
-            email: string
-            avatar: Avatar
         }
-
-        abstract class Avatar
-
-        class DefaultAvatar
-
-        Avatar <|.. DefaultAvatar
     }
 }
 ....
