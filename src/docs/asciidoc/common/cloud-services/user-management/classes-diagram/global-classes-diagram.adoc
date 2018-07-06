@@ -5,10 +5,22 @@ include::{docdir}/variables.adoc[]
 [plantuml, global-classes-diagram, png]
 ....
 package "Global" {
-    class StandardUserWorkflow
+    interface StandardUserWorkflow {
+        signup(accountCreationDetails: AccountCreationDetails, confirmationRedirection: ConfirmationRedirection): Account
+        login(credentials: Credentials): Account
+        logout();
+    }
+
+    class DefaultStandardUserWorkflow {
+        signup(accountCreationDetails: AccountCreationDetails, confirmationRedirection: ConfirmationRedirection): Account
+        login(credentials: Credentials): Account
+        logout();
+    }
+
+    StandardUserWorkflow ^-- DefaultStandardUserWorkflow
 
     abstract class AccountCreationManager {
-        signup(accountCreationDetails: AccountCreationDetails, confirmationRedirection: ConfirmationRedirection): Account
+        signup(accountCreationDetails: AccountCreationDetails): Account
     }
     
     class UsernamePasswordAccountCreationManager {
@@ -36,15 +48,21 @@ package "Global" {
         logout()
     }
 
-    StandardUserWorkflow *-- AccountCreationManager : accountCreationManager
-    StandardUserWorkflow *-- AccountConfirmationManager : accountConfirmationManager
-    StandardUserWorkflow *-- AuthenticationManager : authenticationManager
+    DefaultStandardUserWorkflow *-- AccountCreationManager : accountCreationManager
+    DefaultStandardUserWorkflow *-- AccountConfirmationManager : accountConfirmationManager
+    DefaultStandardUserWorkflow *-- AuthenticationManager : authenticationManager
 
     AuthenticationManager ^.. UsernamePasswordAuthenticationManager
     AccountCreationManager ^.. UsernamePasswordAccountCreationManager
-    AccountConfirmationManager ^.. AccountEmailConfirmationManager
+    AccountConfirmationManager ^.. TemplatedMessageAccountConfirmationManager
+    
 
-    abstract class AccountConfirmationMessageManager
+
+
+    abstract class AccountConfirmationMessageManager {
+        send(message: Message): SentMessage
+    }
+
     abstract class MessageSender {
         send(message: Message): SentMessage
     }
@@ -65,7 +83,7 @@ package "Global" {
         boolean startTls
     }
 
-    AccountEmailConfirmationManager *-- AccountConfirmationMessageManager : accountConfirmationMessageManager
+    TemplatedMessageAccountConfirmationManager *-- AccountConfirmationMessageManager : accountConfirmationMessageManager
     AccountConfirmationMessageManager *-- MessageSender : messageSender 
     MessageSender <|.. EmailManager : emailManager
     EmailManager *-- EmailConfiguration : emailConfiguration
@@ -88,8 +106,9 @@ package "Global" {
     }
 
     AccountConfirmationMessageManager *-- TemplateManager : templateManager
-    TemplateManager *-- ResourceResolver : resourceResolver
-    TemplateManager *-- TemplateParser : templateParser
+    TemplateManager ^-- StringTemplateManager
+    StringTemplateManager *-- ResourceResolver : resourceResolver
+    StringTemplateManager *-- TemplateParser : templateParser
 
     class LocalResourceResolver {
         resolve(location: LocalPath): Resource

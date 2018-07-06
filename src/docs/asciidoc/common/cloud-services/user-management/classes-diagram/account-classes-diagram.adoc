@@ -21,16 +21,17 @@ package "Account" {
 
     package "Confirmation" {
         abstract class ConfirmedAccount {
-            createdAccountId: string
+            accountId: string;
+            accountStatus: AccountStatus;
+            userProfile?: UserProfile;
         }
 
         abstract class PendingAccountConfirmation {
             createdAccountId: string
-            token: string
-            expires: number
+            token: Token
         }
 
-        ConfirmedAccount --> PendingAccountConfirmation
+        Account --> ConfirmedAccount
     }
 
     package "Login" {
@@ -51,27 +52,14 @@ package "Account" {
     }
 
     abstract class Account {
-        accountStatus: AccountStatus
-        accountDetails: AccountDetails
-        userProfile: UserProfile
-
-    }
-
-    abstract class AccountDetails {
         accountId: string
-    }
+        accountStatus: AccountStatus
+        userProfile?: UserProfile
 
-    class UsernamePasswordAccountDetails {
-        username: string
-        email: string
     }
-
-    AccountDetails --> UsernamePasswordAccountDetails
 
     package "User profile" {
-        abstract class UserProfile {
-            accountId: string
-        }
+        abstract class UserProfile {}
     }
 }
 ....
