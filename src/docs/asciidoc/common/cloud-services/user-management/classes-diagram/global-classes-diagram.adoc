@@ -8,13 +8,13 @@ package "Global" {
     interface StandardUserWorkflow {
         signup(accountCreationDetails: AccountCreationDetails, confirmationRedirection: ConfirmationRedirection): Account
         login(credentials: Credentials): Account
-        logout();
+        logout(): Account;
     }
 
     class DefaultStandardUserWorkflow {
         signup(accountCreationDetails: AccountCreationDetails, confirmationRedirection: ConfirmationRedirection): Account
         login(credentials: Credentials): Account
-        logout();
+        logout(): Account;
     }
 
     StandardUserWorkflow ^-- DefaultStandardUserWorkflow
