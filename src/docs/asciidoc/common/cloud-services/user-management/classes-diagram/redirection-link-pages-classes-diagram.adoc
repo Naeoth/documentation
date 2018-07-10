@@ -5,7 +5,7 @@ include::{docdir}/variables.adoc[]
 [plantuml, redirection-link-page-classes-diagram, png]
 ....
 package "Link redirection" {
-    abstract class ConfirmationRedirection
+    abstract class ConfirmationRedirection 
 
     abstract class FullUrlConfirmationRedirection {
         url: string

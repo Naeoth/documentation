@@ -58,8 +58,8 @@ package "Account" {
 
     }
 
-    package "User profile" {
-        abstract class UserProfile {}
+    package "User Profile" {
+        abstract class UserProfile
     }
 }
 ....

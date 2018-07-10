@@ -452,6 +452,11 @@ header nav.opened ul {
   padding-left: 120px;  
 }
 
+h6 {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
 
 .sect1 ~ .sect0 {
 	border-top: 1px solid #145E79;
@@ -502,6 +507,11 @@ table.tableblock>.title,
 
 .conum[data-value] {
   background-color: #145E79;
+}
+
+.exampleblock {
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 /** TABLES */

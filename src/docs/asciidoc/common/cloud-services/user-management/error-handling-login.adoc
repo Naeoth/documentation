@@ -1,0 +1,6 @@
+include::{docdir}/variables.adoc[]
+:relative-path: ../../../
+
+In the login context, the errors may be one of these types :
+
+- LoginError : The user login failed on the application

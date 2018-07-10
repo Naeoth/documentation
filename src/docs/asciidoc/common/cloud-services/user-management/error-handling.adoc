@@ -1,0 +1,21 @@
+include::{docdir}/variables.adoc[]
+:relative-path: ../../../
+
+In the user management process, many errors may occur. To handle them, you can use the `catch()` method in response of your promise.
+
+
+NOTE: Each error has a name property for its error family and a message property for more details 
+
+For each use case, there are many possible errors. They are listed below :
+
+== Sign up error handling
+
+include::{docdir}/common/cloud-services/user-management/error-handling-signup.adoc[leveloffset=+2]
+
+== Login error handling
+
+include::{docdir}/common/cloud-services/user-management/error-handling-login.adoc[leveloffset=+2]
+
+== Account validation error handling
+
+include::{docdir}/common/cloud-services/user-management/error-handling-account-validation.adoc[leveloffset=+2]

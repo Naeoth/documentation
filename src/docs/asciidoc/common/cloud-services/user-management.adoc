@@ -1,27 +1,30 @@
 :relative-path: ../../
 include::{docdir}/variables.adoc[]
 
-== Definitions
+== Definition
+
+The _user management cloud service_ helps you to manage your users in your application.
+This service provides many methods to create an account, connect a user into the application, reset the password, search a user...
+
+The user management rely on the _UserManagementWorkflow_.
+There are different workflows for the user management. The exposed methods are always the same but the process is different.
+
+Depending of your use case, you can choose the proper workflow or the combine many workflow to create your own.
+
+== Workflows
+
+=== StandardUserWorkflow
+
+include::{docdir}/common/cloud-services/user-management/standarduserworkflow.adoc[leveloffset=+2]
 
 == Use cases
 
-=== A user wants to signup to your application using login/password
+include::{docdir}/common/cloud-services/user-management/use-cases-user-management.adoc[leveloffset=+1]
 
-// TODO: how to ?
-// TODO: profile information
-// TODO: login/password
-// TODO: confirmation by email + templating
-// TODO: avatar
-// TODO: validation
+== Error handling
 
-=== A user wants to login to your application using login/password
-
-=== A user wants to login to your application using Google, Facebook or Github
-
-=== A user wants to reset its password
-
-
+include::{docdir}/common/cloud-services/user-management/error-handling.adoc[leveloffset=+1]
 
 == API
 
-
+link:{docdir}/../resources/api/index.html[User management API]

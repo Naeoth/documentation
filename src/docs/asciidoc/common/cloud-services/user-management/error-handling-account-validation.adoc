@@ -1,0 +1,6 @@
+include::{docdir}/variables.adoc[]
+:relative-path: ../../../
+
+In the account validation context, the errors may be one of these types :
+
+- AccountValidationError : The validation of the account failed

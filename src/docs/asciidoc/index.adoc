@@ -26,6 +26,8 @@ include::{docdir}/faq.adoc[]
 
 include::{docdir}/reference.adoc[]
 
+include::{docdir}/api.adoc[]
+
 
 
 ////

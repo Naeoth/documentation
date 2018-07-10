@@ -1,0 +1,18 @@
+:relative-path: ../../../
+include::{docdir}/variables.adoc[]
+
+== A user wants to signup to your application using login/password
+
+include::{docdir}/common/cloud-services/user-management/signup-login-password.adoc[leveloffset=+2]
+
+include::{docdir}/common/cloud-services/user-management/logout.adoc[leveloffset=+3]
+
+== A user wants to login to your application using login/password
+
+include::{docdir}/common/cloud-services/user-management/signin-login-password.adoc[leveloffset=+2]
+
+include::{docdir}/common/cloud-services/user-management/logout.adoc[leveloffset=+3]
+
+== A user is redirected on a customized link after account validation
+
+include::{docdir}/common/cloud-services/user-management/customized-link-confirmation-account.adoc[leveloffset=+3]

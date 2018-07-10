@@ -1,0 +1,68 @@
+include::{docdir}/variables.adoc[]
+:relative-path: ../../../
+
+By default, when the user click on the confirmation link (in the email) to validate his account, he is redirected to this URL :  `https://<urlofmyapp>/account-confirmation/#/token`.
+
+To customize the link, you need to use the implementation of one of these abstract classes :
+
+include::{docdir}/common/cloud-services/user-management/classes-diagram/redirection-link-pages-classes-diagram.adoc[]
+
+NOTE: The token used to identify the confirmed account need to be put in the URL
+
+To add the token in the URL you need to use the `<token>` syntax like below :
+
+.FullUrlConfirmationRedirection
+====
+[source, javascript, linenums]
+----
+import { 
+    DefaultStandardUserWorkflow, 
+    UsernamePasswordAccountCreationDetails, 
+    FullUrlConfirmationRedirection 
+} from '@zetapush/platform';
+
+class UserManagement {
+  constructor(private userManagement: DefaultStandardUserWorkflow) { }
+
+  const URL_CONFIRM_ACCOUNT: FullUrlConfirmationRedirection = {
+    url: 'https://<urlofmyapp>/confirmed/#/<token>'
+  };
+
+  createAccount(signupInfo: UsernamePasswordAccountCreationDetails) {
+    this.userManagement.signup(signupInfo, URL_CONFIRM_ACCOUNT).then((account) => {
+        // Do what you want with the created account
+        // This account waiting the user confirmation
+    });
+  }
+}
+----
+====
+
+.AnchorConfirmationRedirection
+====
+[source, javascript, linenums]
+----
+import { 
+    DefaultStandardUserWorkflow, 
+    UsernamePasswordAccountCreationDetails, 
+    AnchorConfirmationRedirection 
+} from '@zetapush/platform';
+
+class UserManagement {
+  constructor(private userManagement: DefaultStandardUserWorkflow) { }
+
+  const URL_CONFIRM_ACCOUNT: AnchorConfirmationRedirection = {
+    token: 'validationbytoken/<token>'
+  };
+  // The URL will be : 'https://<urlofmyapp>/confirmed/#/validationbytoken/<token>'
+
+
+  createAccount(signupInfo: UsernamePasswordAccountCreationDetails) {
+    this.userManagement.signup(signupInfo, URL_CONFIRM_ACCOUNT).then((account) => {
+        // Do what you want with the created account
+        // This account waiting the user confirmation
+    });
+  }
+}
+----
+====

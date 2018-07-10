@@ -1,0 +1,6 @@
+:relative-path: ./
+include::{docdir}/variables.adoc[]
+
+= API
+
+link:{docdir}/../resources/api/index.html[Generated API]

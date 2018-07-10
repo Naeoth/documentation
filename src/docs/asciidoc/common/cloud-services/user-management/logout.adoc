@@ -1,0 +1,22 @@
+:relative-path: ../../../
+include::{docdir}/variables.adoc[]
+
+If you want to disconnect a user from your application, you need to use `logout()` method from the _DefaultStandardUserWorkflow_.
+
+.Logout
+====
+[source, javascript, linenums]
+----
+import { DefaultStandardUserWorkflow } from '@zetapush/platform';
+
+class UserManagement {
+  constructor(private userManagement: DefaultStandardUserWorkflow) { }
+
+  logout() {
+    this.userManagement.logout().then((account) => {
+        // Return the disconnected account informations
+    });
+  }
+}
+----
+====
