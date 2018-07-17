@@ -3,4 +3,6 @@ include::{docdir}/variables.adoc[]
 
 = API
 
-link:{docdir}/../resources/api/index.html[Generated API]
+== Link to the API documentation
+
+You can see the API documentation at this link : https://zetapush.github.io/zetapush/[API]
