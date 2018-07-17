@@ -9,7 +9,7 @@ This service provides many methods to create an account, connect a user into the
 The user management rely on the _UserManagementWorkflow_.
 There are different workflows for the user management. The exposed methods are always the same but the process is different.
 
-Depending of your use case, you can choose the proper workflow or the combine many workflow to create your own.
+Depending of your use case, you can choose the proper workflow or the combine many workflows to create your own.
 
 == Workflows
 
@@ -24,7 +24,3 @@ include::{docdir}/common/cloud-services/user-management/use-cases-user-managemen
 == Error handling
 
 include::{docdir}/common/cloud-services/user-management/error-handling.adoc[leveloffset=+1]
-
-== API
-
-link:{docdir}/../resources/api/index.html[User management API]

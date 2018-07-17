@@ -7,7 +7,7 @@ include::{docdir}/common/cloud-services/user-management/signup-login-password.ad
 
 include::{docdir}/common/cloud-services/user-management/logout.adoc[leveloffset=+3]
 
-== A user wants to login to your application using login/password
+== A user wants to log into your application using login/password
 
 include::{docdir}/common/cloud-services/user-management/signin-login-password.adoc[leveloffset=+2]
 

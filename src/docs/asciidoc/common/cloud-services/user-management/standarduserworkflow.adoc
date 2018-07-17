@@ -5,19 +5,18 @@ The `StandardUserWorkflow` is the most common use case of user management.
 By default, the workflow use a connection with login/password credentials.
 Before sign in with a new created account, the user need to validate his account by clicking on a link in a confirmation email.
 
-== Sign up
-
-image:images/workflows/standarduser/standardworkflowsignup.png[Sign up]
+.Sign up case
+image:images/workflows/standarduser/standardworkflowsignup.png[Sign up case]
 
 ➊ The developer call the _signup()_ method with the form content. +
-➋ A confirmation email is sent to the user. +
-➌ The developer can customize the template of the confirmation email. +
-➍ When the user click on the confirmation link, the account is validated and the user is redirected. +
+➋ A confirmation email is sent to the user. The developer can customize the template of the confirmation email. +
+➌ When the user click on the confirmation link, the account is validated and the user is redirected on a page specified by the developer. +
 
-== Login
+NOTE: When the user click on the validation URL, he will be redirected on the application at this URL : `https://<urlofmyapp>/account-confirmation/#/token`. The developer can customize the latter.
 
-image:images/workflows/standarduser/standardworkflowlogin.png[Login]
 
-➊ The developer call the _login()_ method with the form content. If it successes, the user profile is returned. +
-➋ If this is correct, the developer redirect the user on the welcome page (of the application). +
+.Login case
+image:images/workflows/standarduser/standardworkflowlogin.png[Login case]
+
+The developer call the _login()_ method with the form content. If it successes, the user profile is returned. If not, the developer redirect the user on the welcome page (of the application).
 

@@ -1,7 +1,7 @@
 include::{docdir}/variables.adoc[]
 :relative-path: ../../../
 
-In the user management process, many errors may occur. To handle them, you can use the `catch()` method in response of your promise.
+In the user management process, many errors may occur. To handle them, you can use the `catch()` method in response of each method you call.
 
 
 NOTE: Each error has a name property for its error family and a message property for more details 

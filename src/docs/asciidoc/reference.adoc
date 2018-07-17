@@ -19,7 +19,7 @@ include::{docdir}/common/cloud-services/summary.adoc[leveloffset=+1]
 
 === User Management
 
-include::{docdir}/common/cloud-services/user-management.adoc[leveloffset=+2]
+include::{docdir}/common/cloud-services/user-management/user-management.adoc[leveloffset=+2]
 
 ---
 
