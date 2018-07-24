@@ -8,3 +8,4 @@ include::{docdir}/common/cloud-services/user-management/classes-diagram/templati
 include::{docdir}/common/cloud-services/user-management/classes-diagram/account-classes-diagram.adoc[]
 include::{docdir}/common/cloud-services/user-management/classes-diagram/redirection-link-pages-classes-diagram.adoc[]
 include::{docdir}/common/cloud-services/user-management/classes-diagram/token-classes-diagram.adoc[]
+include::{docdir}/common/cloud-services/user-management/classes-diagram/validator-classes-diagram.adoc[]

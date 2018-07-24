@@ -40,12 +40,12 @@ package "Global" {
 
     abstract class AuthenticationManager {
         login(credentials: Credentials): Account
-        logout()
+        logout(): Account
     }
 
     class UsernamePasswordAuthenticationManager {
         login(credentials: Credentials): Account
-        logout()
+        logout(): Account
     }
 
     DefaultStandardUserWorkflow *-- AccountCreationManager : accountCreationManager
