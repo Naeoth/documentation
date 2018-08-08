@@ -1,7 +1,7 @@
 :relative-path: ../../
 include::{docdir}/variables.adoc[]
 
-.Deploy the worker
+.Deploy the front
 [source, console, subs="attributes+"]
 ----
 $ npm run deploy -- --front

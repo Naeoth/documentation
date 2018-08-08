@@ -1,18 +1,21 @@
 :relative-path: ../../
 include::{docdir}/variables.adoc[]
 
-.Deploy the worker
-[source, console, subs="attributes+"]
-----
-$ npm run deploy -- --worker
-----
 
-[TIP]
-====
-`npm run deploy` is a script alias defined in the `package.json` file.
-The command that is executed under the hood is:
-[source, console, subs="attributes+"]
-----
-$ zeta push --worker
-----
-====
+// .Deploy the worker
+// [source, console, subs="attributes+"]
+// ----
+// $ npm run deploy -- --worker
+// ----
+// 
+// [TIP]
+// ====
+// `npm run deploy` is a script alias defined in the `package.json` file.
+// The command that is executed under the hood is:
+// [source, console, subs="attributes+"]
+// ----
+// $ zeta push --worker
+// ----
+// ====
+
+NOTE: This feature is WIP

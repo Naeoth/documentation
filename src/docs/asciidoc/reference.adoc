@@ -43,10 +43,6 @@ include::{docdir}/common/cli/cli.adoc[leveloffset=+1]
 == Configuration
 include::{docdir}/common/configuration/configuration.adoc[leveloffset=+1]
 
-=== User Management
-
-include::{docdir}/common/cloud-services/user-management/user-management.adoc[leveloffset=+2]
-
 ---
 
 TODO: https://github.com/zetapush/documentation/issues/61
